@@ -13,9 +13,9 @@ let otpStore = {};
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-  user: process.env.vjathinbharyav1st + '@gmail.com',
-  pass: process.env.kiorhnystyuollsp
-}
+    user: process.env.GMAIL_USER + '@gmail.com',
+    pass: process.env.GMAIL_PASS
+  }
 });
 
 app.post('/send-code', (req, res) => {
