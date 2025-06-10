@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Racing Game</title>
+  <style>
+    canvas { border: 2px solid black; background: #e0e0e0; display: block; margin: auto; }
+    body { text-align: center; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <h1>Car Racing Game - Level 1</h1>
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let car = { x: 175, y: 500, width: 50, height: 100, speed: 5 };
+    let keys = {};
+
+    let opponents = [
+      { x: 100, y: -200, width: 50, height: 100, speed: 3 },
+      { x: 250, y: -600, width: 50, height: 100, speed: 4 }
+    ];
+
+    document.addEventListener("keydown", e => keys[e.key] = true);
+    document.addEventListener("keyup", e => keys[e.key] = false);
+
+    function update() {
+      if (keys["ArrowLeft"] && car.x > 0) car.x -= car.speed;
+      if (keys["ArrowRight"] && car.x < 350) car.x += car.speed;
+
+      opponents.forEach(o => {
+        o.y += o.speed;
+        if (o.y > 600) {
+          o.y = -Math.random() * 500;
+          o.x = Math.random() > 0.5 ? 100 : 250;
+        }
+        if (car.x < o.x + o.width && car.x + car.width > o.x &&
+            car.y < o.y + o.height && car.y + car.height > o.y) {
+          alert("Game Over!");
+          location.reload();
+        }
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, 400, 600);
+      ctx.fillStyle = "blue";
+      ctx.fillRect(car.x, car.y, car.width, car.height);
+      ctx.fillStyle = "red";
+      opponents.forEach(o => {
+        ctx.fillRect(o.x, o.y, o.width, o.height);
+      });
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
